@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+    <meta name="theme-color" content="#000000" />
+
+    <title>I.Sicily Zenodo Uploader</title>
+  </head>
+  <body>
+
+  <div>
+
+      <form onSubmit="handleSubmit()">
+        <p>
+          Upload TEI and PDF files to Zenodo, creating a new DOI for each file.  The PDFs are created on the fly.
+        </p>
+        <p>
+          The new DOI will be written to the publicationStatement/idno@type=DOI
+        </p>
+          <label htmlFor='repo-name'>Github Repository Name (e.g., jchartrand/my-city-list)</label>
+          <Input name='repoName' id='repo-name'/>
+
+          <label htmlFor='dir-name'>Github Directory (e.g., /canadian-cities)</label>
+          <Input name='dirName' id='dir-name'/>
+
+          <label htmlFor='zenodo-token'>Github OAuth token</label>
+          <Input name='githubToken' id='github-token'/>
+
+          <label htmlFor='zenodo-token'>Zenodo OAuth token</label>
+          <Input name='zenodoToken' id='zenodo-token'/>
+
+        <button type="submit">Upload to Zenodo" </button>
+        <button type="button" onClick="buildBibliography()">Rebuild Bibliography</button>
+        <button id = "processFiles" type="button">Test PDF build</button>
+      </form>
+
+
+  </div>
+  <script src="../static/bundle.js"></script>
+  </body>
+</html>
