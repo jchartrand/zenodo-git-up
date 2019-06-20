@@ -8,38 +8,80 @@
     />
     <meta name="theme-color" content="#000000" />
 
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css">
+    <!-- Bootstrap core CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Material Design Bootstrap -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.8.2/css/mdb.min.css" rel="stylesheet">
+    <link href="../css/multi-select.dist.css" media="screen" rel="stylesheet" type="text/css">
+    <link href="../css/isicily.css" media="screen" rel="stylesheet" type="text/css">
     <title>I.Sicily Zenodo Uploader</title>
   </head>
   <body>
 
-  <div>
+  <div class = "sticky">
+    <h3 class="animated fadeIn mb-3" style="margin-top:2em" id="elapsedTime"> </h3>
+    <h3 class="animated fadeIn mb-3" id="totalSucceeded"></h3>
+    <h3 class="animated fadeIn mb-3" id="totalFailed"></h3>
+    <h3 class="animated fadeIn mb-3" id="status"></h3>
+  </div>
 
-      <form onSubmit="handleSubmit()">
-        <p>
-          Upload TEI and PDF files to Zenodo, creating a new DOI for each file.  The PDFs are created on the fly.
-        </p>
-        <p>
-          The new DOI will be written to the publicationStatement/idno@type=DOI
-        </p>
-          <label htmlFor='repo-name'>Github Repository Name (e.g., jchartrand/my-city-list)</label>
-          <Input name='repoName' id='repo-name'/>
+    <div class="flex-center flex-column">
 
-          <label htmlFor='dir-name'>Github Directory (e.g., /canadian-cities)</label>
-          <Input name='dirName' id='dir-name'/>
 
-          <label htmlFor='zenodo-token'>Github OAuth token</label>
-          <Input name='githubToken' id='github-token'/>
+      <h5 class="animated fadeIn mb-3" style="margin-top:2em">I.Sicily Github/Zenodo Uploader</h5>
 
-          <label htmlFor='zenodo-token'>Zenodo OAuth token</label>
-          <Input name='zenodoToken' id='zenodo-token'/>
+      <form class="border border-light p-5">
 
-        <button type="submit">Upload to Zenodo" </button>
-        <button type="button" onClick="buildBibliography()">Rebuild Bibliography</button>
-        <button id = "processFiles" type="button">Test PDF build</button>
+        <label for="githubToken">Github OAuth Token</label>
+        <input type="text" id="githubToken" class="form-control mb-4" placeholder="Github OAuth Token" value="">
+
+        <label for="githubRepo">Github Repository</label>
+        <input type="text" id="githubRepo" class="form-control mb-4" placeholder="Github Repo (e.g., ISicily)" value="ISicily-1">
+
+        <label for="githubOwner">Github Repository Owner</label>
+        <input type="text" id="githubOwner" class="form-control mb-4" placeholder="Github User (e.g. jpgrag)" value="jchartrand">
+
+        <label for="zenodoToken">Zenodo OAuth Token</label>
+        <input type="text" id="zenodoToken" class="form-control mb-4" placeholder="Zenodo OAuth Token" value="">
+
+        <div class="custom-control custom-checkbox mb-4">
+          <input type="checkbox" class="custom-control-input" checked id="useSandbox">
+          <label class="custom-control-label" for="useSandbox">Use Zenodo Sandbox</label>
+        </div>
+
+        <button class="btn btn-info btn-block" type="button" id="buildBibl">Rebuild Bibliography Cache from Zotero</button>
+
+        <button class="btn btn-info btn-block" type="button" style="margin-top:1em;margin-bottom:2em" id="listFiles">Get Inscription List from Github</button>
+
+        <select id="my-select" multiple="multiple" name="my-select[]"></select>
+        <a href='#' id='select-all'>select all</a>
+        <a href='#' id='deselect-all' style="float:right">deselect all</a>
+
+        <button class="btn btn-info btn-block" type="button" style="margin-top:1em" id = "processFiles">Upload Selected Records to Zenodo</button>
+
       </form>
 
+      <h4 class="animated fadeIn mb-3" style="margin-top:2em">Failed Inscriptions</h4>
+      <ul class="list-group" id="failedList"></ul>
 
-  </div>
+      <h4 class="animated fadeIn mb-3" style="margin-top:2em">Published Inscriptions</h4>
+      <ul class="list-group" id="publishedList"></ul>
+
+    </div>
+
+
+  <!-- JQuery -->
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <!-- Bootstrap tooltips -->
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.4/umd/popper.min.js"></script>
+  <!-- Bootstrap core JavaScript -->
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/js/bootstrap.min.js"></script>
+  <!-- MDB core JavaScript -->
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.8.2/js/mdb.min.js"></script>
+
   <script src="../static/bundle.js"></script>
+
   </body>
 </html>

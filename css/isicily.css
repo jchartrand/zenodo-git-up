@@ -1,0 +1,10 @@
+.flex-center ul li {
+    margin-bottom: 0rem;
+}
+
+
+div.sticky {
+    position: -webkit-sticky; /* Safari */
+    position: sticky;
+    top: 0;
+}
