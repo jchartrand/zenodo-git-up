@@ -8,21 +8,22 @@ const parser = new DOMParser({
 	}
 });
 
-function updateDOIinDoc(doi, xmlDoc) {
-	let doiIdno = select("//tei:publicationStmt/tei:idno[@type='DOI']", xmlDoc)
-	if (! doiIdno.length) {
+function addDOIToDoc(doi, xmlDoc, date) {
+	//let doiIdno = select("//tei:publicationStmt/tei:idno[@type='DOI']", xmlDoc)
+	//if (! doiIdno.length) {
 		let pubStmt = select("//tei:publicationStmt", xmlDoc, true)
 		let availabilityElem = select("//tei:publicationStmt/tei:availability", xmlDoc, true)
 		//let newIdnoXML = `<idno type="DOI">${doi}</idno>\n${' '.repeat(16)}`
 		//let newIdNo = parser.parseFromString(newIdnoXML)
 		let newIdNo = xmlDoc.createElement('idno')
 		newIdNo.setAttribute('type', 'DOI')
+		newIdNo.setAttribute('when', date)
 		newIdNo.appendChild(xmlDoc.createTextNode(doi))
 		pubStmt.insertBefore(newIdNo, availabilityElem)
 		pubStmt.insertBefore(xmlDoc.createTextNode(`\n${' '.repeat(16)}`),availabilityElem)
-	} else {
-		doiIdno[0].textContent = doi;
-	}
+//	} else {
+	//	doiIdno[0].textContent = doi;
+	//}
 }
 
 function addISicilyIdToDoc(isicilyId, xmlDoc) {
@@ -73,4 +74,4 @@ function addRevision(xmlDoc, date) {
 	revisionChangeList.appendChild(xmlDoc.createTextNode(`\n${' '.repeat(12)}`))
 }
 
-export { updateDOIinDoc, addRespStmt, addRevision, addISicilyIdToDoc}
+export { addDOIToDoc, addRespStmt, addRevision, addISicilyIdToDoc}

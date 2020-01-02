@@ -29,7 +29,8 @@ async function createPDF(xmlDoc, doi, date, xmlString, fonts, bibliography) {
 			};
 			// `http://sicily.classics.ox.ac.uk/inscription_images/ISic0007/ISic0007.jpg`
 			//image.src =  `http://sicily.classics.ox.ac.uk/inscription_images/${isicilyId}/${imageFile}`;
-			image.src =  `../images/${imageFile}`;
+			let smallImageFile = imageFile.replace(".jpg","_small.jpg");
+			image.src =  `../images/${smallImageFile}`;
 		});
 	}
 
@@ -301,7 +302,7 @@ async function createPDF(xmlDoc, doi, date, xmlString, fonts, bibliography) {
 
 			//let imgData = await this.getDataUri('http://sicily.classics.ox.ac.uk/inscription_images/ISic0007/ISic0007.jpg')
 
-//	await addImage(isicilyId, pdfDoc);
+			await addImage(isicilyId, pdfDoc);
 
 			pdfDoc.end();
 

@@ -1,5 +1,5 @@
 import { buildCachedBibliography, getCachedBibliography } from "./bibliography";
-import  { updateDOIinDoc, addRespStmt, addRevision, addISicilyIdToDoc } from "./xmlUtils"
+import  { addDOIToDoc, addRespStmt, addRevision, addISicilyIdToDoc } from "./xmlUtils"
 import {createDOIDeposition, uploadFilesToDeposition, addMetadata, publish} from "./zenodo"
 import createPDF from "./createPDF"
 import vkbeautify from 'vkbeautify'
@@ -20,15 +20,10 @@ const XMLSerializer = require('xmldom').XMLSerializer;
 const serializer = new XMLSerializer();
 const xpath = require('xpath')
 const select = xpath.useNamespaces({"tei": "http://www.tei-c.org/ns/1.0"});
-console.log("loaded the apps.js")
 const date = (new Date()).toISOString().substring(0, 10);
-let githubOwner //= CONSTANTS.GITHUB_DATA_REPO_OWNER
-let githubRepo //= CONSTANTS.GITHUB_DATA_REPO_NAME
+let githubOwner
+let githubRepo
 
-	async function handleSubmit(event) {
-		event.preventDefault();
-		getFiles()
-	}
 
 Number.prototype.toTime = function(isSec) {
 	var ms = isSec ? this * 1e3 : this,
@@ -69,6 +64,7 @@ Number.prototype.toTime = function(isSec) {
 					$('#publishedList').append(`<li id="${itemId}" class="list-group-item">${file.path} -- <a href="${doi}">${doi}</a></li>`)
 
 				} catch (e) {
+					console.log(e)
 					console.log(`Problem with file ${file.path}: ${e}`);
 					$('#failedList').append(`<li id="${itemId}" class="list-group-item">${file.path} -- error:  ${e.toString().slice(0,30)}</li>`)
 
@@ -96,33 +92,40 @@ Number.prototype.toTime = function(isSec) {
 	async function processFile(xmlText, fonts, bibliography, sha, path, zenodoToken, useSandbox) {
 		let xmlDoc = parser.parseFromString(xmlText)
 		let isicilyId = select("string(//tei:publicationStmt/tei:idno[@type='filename'])", xmlDoc)
+	//	let zenodoDOI = select("string(//tei:publicationStmt/tei:idno[@type='DOI'])", xmlDoc)
+
+		// *************************
+		// probably have to change createDOIDeposition to use the newversion if zenodoDOI exists
+		// and then maybe set the doi in the returned object as just .DOI using either the
+		// prereserved or latest_draft as appropriate.
+		// And then change 'publish' call to use this DOI property
+		// **************************
 
 		 let deposition = await createDOIDeposition(zenodoToken, useSandbox);
 		 let doi = deposition.metadata.prereserve_doi.doi
+
 		let pdf = await createPDF(xmlDoc, doi, date, xmlText, fonts, bibliography)
 		addISicilyIdToDoc(isicilyId, xmlDoc)
-		updateDOIinDoc(doi, xmlDoc)
+		addDOIToDoc(doi, xmlDoc, date)
 		addRespStmt(xmlDoc)
 		addRevision(xmlDoc, date)
 		let xmlString = serializer.serializeToString(xmlDoc)
 		let pdfUploadResult = await uploadFilesToDeposition(deposition.links.bucket, `${isicilyId}.pdf`, pdf, zenodoToken)
 		let xmlUploadResult = await uploadFilesToDeposition(deposition.links.bucket, `${isicilyId}.xml`, xmlString, zenodoToken)
-		let addMetadataResult = await addMetadata(deposition, isicilyId, zenodoToken, useSandbox)
+		let addMetadataResult = await addMetadata(deposition, isicilyId, zenodoToken, useSandbox, xmlDoc)
 		await publish(deposition, zenodoToken, useSandbox)
 		await saveTEIFileToGithub(xmlString, sha, path)
 		return deposition.links.html;
 	}
 
 
-
 	async function saveTEIFileToGithub(xmlString, sha, fileName) {
 		let path = `inscriptions/${fileName}`
 		let content = Buffer.from(xmlString).toString('base64')
 		let message = "updated DOI"
-		//let branch = "master"
 		await github.repos.updateFile({owner: githubOwner, repo: githubRepo, path, message, content, sha})
 			.then(result=>{},
-					error=>{console.log(`Problem saving file ${path} back to the Github repository: ${error}`)})
+					e=>{console.log(`Problem saving file ${path} back to the Github repository: ${e}`);return e})
 	}
 
 	async function getFont(fontName) {
