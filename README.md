@@ -2,9 +2,16 @@
 
 Reads TEI XML epidoc files from a Github repository, and for each file builds a PDF that describes the inscription, and then uploads the PDF and the associated TEI XML file to Zotero, in the process creating a new DOI for the file.  The new DOI is also recorded in the PDF and the TEI XML file.  The TEI XML file is saved back to the Github repository. 
 
-1. [Images](#images)
-2. [Bibliographic References](#bibliographic_references)
-3. [Use](#use)
+[Preparation](#preparation)
+* [Images](#images)
+* [Bibliographic References](#bibliographic-references)
+* [Fork main repository](#fork-main-repository)
+
+[Use](#use)
+
+### Preparation
+
+There are a few things you have to get ready before you actually invoke the upload.
 
 #### Images
 
@@ -45,23 +52,33 @@ This cache must be available or the uploading will fail.  The cached file will a
 
 #### Use
 
-Runs directly from this Github repository, using Github pages, which publishes the repository as a web site.
-
-To use, open:
+Open the upload form in this Github repository:
 
 https://jchartrand.github.io/zenodo-git-up/public/index.html
 
-Then fill out the form with:
- 
-- A Github token
- 
-Which you can get as described here:  https://help.github.com/en/github/authenticating-to-github/creating-a-personal-access-token-for-the-command-line
-  
-  It has to be a token given to the owner of the repository.
-  
-- Your Zenodo token
+which will show you the form for running the upload.
 
-which you can get as described here: 
+You will then need to specify a few things including the repository that holds the I.Sicily files.  The upload can be run directly on the I.Sicily github respository itself, but a safer approach is to fork the I.Sicily Github repository
+and run the upload on the forked copy.  After the upload is finished create a pull request from the forked repository back to the
+I.Sicily repository.  Running the upload on the forked copy allows one to check for problems before actually modifying the original repository.  It also makes it easier to
+see which commits were part of the upload.
+
+
+So, once you've forked the I.Sicily repo, fill out the form with:
+ 
+- Github OAuth Token
+
+A Github token which you can get as described here:  https://help.github.com/en/github/authenticating-to-github/creating-a-personal-access-token-for-the-command-line
+  
+The token has to be a token given to the owner of the repository.
+  
+- Github Repository
+
+The name of the Github repository holding the I.Sicily files
+
+- A Zenodo token
+
+which you can get  here:  https://zenodo.org/account/settings/applications/tokens/new/
 
 - the name of the repository that has the TEI files
 
