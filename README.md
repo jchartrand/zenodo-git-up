@@ -7,8 +7,7 @@ The new DOI is also recorded in the PDF and the TEI XML file.  The TEI XML file 
 [Preparation](#preparation)
 * [Images](#images)
 * [Cache Zotero for Bibliographic References](#cache-zotero-for-bibliographic-references)
-* [Fork main repository](#fork-main-repository)
-* [Create a copy of the I.Sicily Repository](#create-a-copy-of-the-i.sicily-repository)
+* [Create a copy of the I.Sicily Repository](#create-a-copy-of-the-isicily-repository)
 
 [Use](#use)
 
@@ -53,7 +52,7 @@ The zotero reference (e.g., `http://zotero.org/groups/382445/items/R46KDTZX`) is
 
 This cache must be available or the uploading will fail.  The cached file will appear in the root directory as cachedBibl.json and should be between 1 and 2 Megabytes.  Refresh the cache anytime a change has been made to the Zotero bibliography.
 
-#### Create a copy of the I.Sicily Repository
+#### Create a copy of the ISicily Repository
 
 The upload can be run directly on the I.Sicily github respository itself, which will directly modify 
 every uploaded XML file(by writing a new DOI into the epidoc), but 
@@ -130,3 +129,15 @@ And all that succeeded will appear in the 'Published Inscriptions List'
 Note that you can check overall progress by scrolling to the top of the page where a summary is shown:
 
 ![select](docs/images/summary.png)
+
+When all is done, the uploader will have:
+ 
+* created a new Zenodo DOI for each selected I.Sicily epidoc file
+* added the new DOI to the identifiers in the epidoc file
+* recorded that we changed the epidoc file by adding a change element to the revisionDesc
+* created a PDF of the inscription that includes images and bibliographic references
+* uploaded both the PDF and the epidoc file to Zenodo
+* saved the epidoc file back to the repository
+
+If you've run the uploader on a forked copy of the I.Sicily repository, you'll now want to submit a pull 
+request to merge the changed epidoc files back into the main repository as explained above in * [Create a copy of the I.Sicily Repository](#create-a-copy-of-the-isicily-repository) 
