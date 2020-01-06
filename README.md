@@ -143,8 +143,10 @@ When all is done, the uploader will have:
 * saved the epidoc file back to the repository
 
 If you've run the uploader on a forked copy of the I.Sicily repository, you'll now want to submit a pull 
-request to merge the changed epidoc files back into the main repository as explained above in [Create a copy of the I.Sicily Repository](#create-a-copy-of-the-isicily-repository) but certainly first check 
-a few of the inscriptions in the forked repository to ensure the files were properly modified.  And check Zenodo to make sure the PDF and
-epidoc file were uploaded and that the PDF was properly created.
+request to merge the changed epidoc files back into the main repository as explained above in [Create a copy of the I.Sicily Repository](#create-a-copy-of-the-isicily-repository), but certainly first check 
+a few of the inscriptions in the forked repository to ensure the files were properly modified.  And similarly check a few of the Zenodo uploads (deposits) to make sure the PDF and
+epidoc file were uploaded and that the PDF was properly created.  For convenience, a link to each zenodo deposit is provided in the 'Published inscriptions' list:
+
+![select](docs/images/zenodoLink.png)
 
 
