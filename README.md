@@ -1,8 +1,8 @@
 ## I.Sicily Zenodo uploader
 
-Reads I.Sicily TEI XML epidoc files from the I.Sicily Github repository (https://github.com/JonPrag/ISicily) or from a 'forked' copy of that repository, and for each file builds a PDF that describes 
-the inscription, then uploads the PDF and the associated TEI XML file to Zotero, in the process creating a new DOI for the file.  
-The new DOI is also recorded in the PDF and the TEI XML file.  The TEI XML file is saved back to the Github repository. 
+Reads I.Sicily TEI XML Epidoc files from the I.Sicily Github repository (https://github.com/JonPrag/ISicily) or from a 'forked' copy of that repository, and for each file builds a PDF that describes 
+the inscription and then uploads the PDF and the associated TEI XML file to Zotero, in the process creating a new DOI for the inscription.  
+The new DOI is also recorded in the PDF and the TEI XML file, and the TEI XML Epidoc file is saved back to the Github repository. 
 
 [Preparation](#preparation)
 * [Images](#images)
@@ -60,6 +60,9 @@ a safer approach is to fork the I.Sicily Github repository
 and run the upload on the forked copy.  
 
 Forking is described here (https://help.github.com/en/github/getting-started-with-github/fork-a-repo) but is as simple as clicking the fork button in the I.Sicily repository:
+
+NOTE:  if you later want to again use the forked copy to do a new upload to Zotero, be sure to update your forked copy with any changes that might have been made in the interim in the real I.Sicily repository.  Syncing a forked repository is described here:  https://help.github.com/en/github/collaborating-with-issues-and-pull-requests/syncing-a-fork
+Alternatively, you could just delete your old forked copy and fork a new copy directly from the I.Sicily repository.
 
 ![fork](docs/images/fork.png)
 
@@ -140,4 +143,8 @@ When all is done, the uploader will have:
 * saved the epidoc file back to the repository
 
 If you've run the uploader on a forked copy of the I.Sicily repository, you'll now want to submit a pull 
-request to merge the changed epidoc files back into the main repository as explained above in * [Create a copy of the I.Sicily Repository](#create-a-copy-of-the-isicily-repository) 
+request to merge the changed epidoc files back into the main repository as explained above in * [Create a copy of the I.Sicily Repository](#create-a-copy-of-the-isicily-repository) but certainly first check 
+a few of the inscriptions in the forked repository to ensure the files were properly modified.  And check Zenodo to make sure the PDF and
+epidoc file were uploaded and that the PDF was properly created.
+
+
