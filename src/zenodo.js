@@ -15,7 +15,11 @@ function createDOIDeposition(zenodoToken, useSandbox) {
 	})
 		.then(response=>response.json())
 		.then(response => {
-			if (response.status == 400) { throw 'Adding metadata failed.' }
+			console.log("response from deposition creation:")
+			console.log(response)
+			if (response.status >= 400) {
+				console.log("Creating deposition failed.")
+				throw 'Adding metadata failed.' }
 			else {
 				return response;
 			}
@@ -33,7 +37,10 @@ function uploadFilesToDeposition(bucketURI, filename, content, zenodoToken) {
 		body: content
 		//  might need to first convert the response to json.
 	}).then(response => {
-		if (response.status == 400) {
+		console.log("Response from file upload to Zenodo (expand to see all): ")
+		console.log(response)
+		if (response.status >= 400) {
+			console.log("Uploading files failed.  Response (expand to see all): ")
 			throw 'Uploading files failed.'
 		} })
 }
@@ -114,10 +121,14 @@ function publish(deposition, zenodoToken, useSandbox) {
 		method: 'POST'
 	})
 		.then(response => {
+
 				//  might need to first convert the response to json.
-			if (response.status == 400) throw 'Publishing failed.'
-			console.log(response)
-			console.log(deposition)
+			if (response.status >= 400) {
+				console.log(response)
+				console.log(deposition)
+				throw 'Publishing failed.'
+			}
+
 		}
 		)
 
