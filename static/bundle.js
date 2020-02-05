@@ -103790,62 +103790,62 @@ function _processFile() {
   _processFile = (0, _asyncToGenerator2["default"])(
   /*#__PURE__*/
   _regenerator["default"].mark(function _callee2(xmlText, fonts, bibliography, sha, path, zenodoToken, useSandbox) {
-    var xmlDoc, isicilyId, zenodoDOI, deposition, doi, pdf, xmlString, pdfUploadResult, xmlUploadResult, addMetadataResult;
+    var xmlDoc, isicilyId, deposition, doi, pdf, xmlString, pdfUploadResult, xmlUploadResult, addMetadataResult;
     return _regenerator["default"].wrap(function _callee2$(_context2) {
       while (1) {
         switch (_context2.prev = _context2.next) {
           case 0:
             xmlDoc = parser.parseFromString(xmlText);
-            isicilyId = select("string(//tei:publicationStmt/tei:idno[@type='filename'])", xmlDoc);
-            zenodoDOI = select("string(//tei:publicationStmt/tei:idno[@type='DOI'])", xmlDoc); // *************************
+            isicilyId = select("string(//tei:publicationStmt/tei:idno[@type='filename'])", xmlDoc); //	let zenodoDOI = select("string(//tei:publicationStmt/tei:idno[@type='DOI'])", xmlDoc)
+            // *************************
             // probably have to change createDOIDeposition to use the newversion if zenodoDOI exists
             // and then maybe set the doi in the returned object as just .DOI using either the
             // prereserved or latest_draft as appropriate.
             // And then change 'publish' call to use this DOI property
             // **************************
 
-            _context2.next = 5;
-            return (0, _zenodo.createDOIDeposition)(zenodoToken, useSandbox, zenodoDOI);
+            _context2.next = 4;
+            return (0, _zenodo.createDOIDeposition)(zenodoToken, useSandbox);
 
-          case 5:
+          case 4:
             deposition = _context2.sent;
             doi = deposition.metadata.prereserve_doi.doi;
-            _context2.next = 9;
+            _context2.next = 8;
             return (0, _createPDF["default"])(xmlDoc, doi, date, xmlText, fonts, bibliography);
 
-          case 9:
+          case 8:
             pdf = _context2.sent;
             (0, _xmlUtils.addISicilyIdToDoc)(isicilyId, xmlDoc);
             (0, _xmlUtils.addDOIToDoc)(doi, xmlDoc, date);
             (0, _xmlUtils.addRespStmt)(xmlDoc);
             (0, _xmlUtils.addRevision)(xmlDoc, date);
             xmlString = serializer.serializeToString(xmlDoc);
-            _context2.next = 17;
+            _context2.next = 16;
             return (0, _zenodo.uploadFilesToDeposition)(deposition.links.bucket, "".concat(isicilyId, ".pdf"), pdf, zenodoToken);
 
-          case 17:
+          case 16:
             pdfUploadResult = _context2.sent;
-            _context2.next = 20;
+            _context2.next = 19;
             return (0, _zenodo.uploadFilesToDeposition)(deposition.links.bucket, "".concat(isicilyId, ".xml"), xmlString, zenodoToken);
 
-          case 20:
+          case 19:
             xmlUploadResult = _context2.sent;
-            _context2.next = 23;
+            _context2.next = 22;
             return (0, _zenodo.addMetadata)(deposition, isicilyId, zenodoToken, useSandbox, xmlDoc);
 
-          case 23:
+          case 22:
             addMetadataResult = _context2.sent;
-            _context2.next = 26;
+            _context2.next = 25;
             return (0, _zenodo.publish)(deposition, zenodoToken, useSandbox);
 
-          case 26:
-            _context2.next = 28;
+          case 25:
+            _context2.next = 27;
             return saveTEIFileToGithub(xmlString, sha, path);
 
-          case 28:
+          case 27:
             return _context2.abrupt("return", deposition.links.html);
 
-          case 29:
+          case 28:
           case "end":
             return _context2.stop();
         }
@@ -105270,7 +105270,11 @@ function createDOIDeposition(zenodoToken, useSandbox) {
   }).then(function (response) {
     return response.json();
   }).then(function (response) {
-    if (response.status == 400) {
+    console.log("response from deposition creation:");
+    console.log(response);
+
+    if (response.status >= 400) {
+      console.log("Creating deposition failed.");
       throw 'Adding metadata failed.';
     } else {
       return response;
@@ -105288,7 +105292,11 @@ function uploadFilesToDeposition(bucketURI, filename, content, zenodoToken) {
     body: content //  might need to first convert the response to json.
 
   }).then(function (response) {
-    if (response.status == 400) {
+    console.log("Response from file upload to Zenodo (expand to see all): ");
+    console.log(response);
+
+    if (response.status >= 400) {
+      console.log("Uploading files failed.  Response (expand to see all): ");
       throw 'Uploading files failed.';
     }
   });
@@ -105302,7 +105310,7 @@ function addMetadata(deposition, isicilyId, zenodoToken, useSandbox, xmlDoc) {
   var contributors = respStmtNames.map(function (contributor) {
     var orcid = contributor.getAttribute('ref');
     var name = contributor.textContent;
-    var type = 'ProjectMember';
+    var type = name == 'Jonathan Prag' ? 'ProjectLeader' : 'ProjectMember';
     return orcid ? {
       name: name,
       type: type,
@@ -105315,8 +105323,6 @@ function addMetadata(deposition, isicilyId, zenodoToken, useSandbox, xmlDoc) {
   var publicationDate = select("tei:TEI/tei:teiHeader/tei:revisionDesc/tei:listChange/tei:change", xmlDoc).reduce(function (finalChange, change) {
     return change.textContent !== 'Updated Zenodo DOI' && finalChange.getAttribute('when') <= change.getAttribute('when') ? change : finalChange;
   }).getAttribute('when');
-  console.log('existing deposition ');
-  console.log(deposition);
   var data = {
     'metadata': {
       //...deposition.metadata,
@@ -105374,9 +105380,11 @@ function publish(deposition, zenodoToken, useSandbox) {
     method: 'POST'
   }).then(function (response) {
     //  might need to first convert the response to json.
-    if (response.status == 400) throw 'Publishing failed.';
-    console.log(response);
-    console.log(deposition);
+    if (response.status >= 400) {
+      console.log(response);
+      console.log(deposition);
+      throw 'Publishing failed.';
+    }
   });
 }
 
