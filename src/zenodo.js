@@ -103,15 +103,21 @@ function addMetadata(deposition, isicilyId, zenodoToken, useSandbox, xmlDoc) {
 		}
 	}
 
+		console.log("the data for the metadata call: ")
+		console.log(data)
+		console.log("and as json:")
+		console.log(JSON.stringify(data))
 	return fetch(`https://${useSandbox?ZENODO_BASE_URI_SANDBOX:ZENODO_BASE_URI_LIVE}/api/deposit/depositions/${deposition.id}?access_token=${zenodoToken}`, {
 		method: 'PUT',
 		headers: {"Content-Type": "application/json"},
 		body: JSON.stringify(data)
 		//  might need to first convert the response to json.
-	}).then(response => {if (response.status == 400) {
-		console.log('Some problem with the metadata:')
+	}).then(response => {if (response.status >= 400) {
+		console.log('Some problem with the metadata we tried to submit:')
 		console.log(data)
-		throw 'Adding metadata failed.'
+		console.log('The failed response to the metadata add: ')
+		console.log(response)
+		throw 'Adding metadata failed, but why oh why?'
 	}})
 }
 
