@@ -7,6 +7,7 @@ const parser = new DOMParser({
 		error: msg => {throw new Error(msg)}
 	}
 });
+const ISICILY_ID_BASE_URI = 'http://sicily.classics.ox.ac.uk/inscription/'
 
 function addDOIToDoc(doi, xmlDoc, date) {
 	//let doiIdno = select("//tei:publicationStmt/tei:idno[@type='DOI']", xmlDoc)
@@ -28,14 +29,12 @@ function addDOIToDoc(doi, xmlDoc, date) {
 
 function addISicilyIdToDoc(isicilyId, xmlDoc) {
 	let idno = select("//tei:publicationStmt/tei:idno[@type='URI']", xmlDoc)
-	if (! idno.length) {
+	if (! idno.length && ! idno.includes(ISICILY_ID_BASE_URI)) {
 		let availabilityElem = select("//tei:publicationStmt/tei:availability", xmlDoc, true)
 		let pubStmt = select("//tei:publicationStmt", xmlDoc, true)
-		//let newIdnoXML = `<idno type="URI">http://sicily.classics.ox.ac.uk/inscription/${isicilyId}</idno>\n${' '.repeat(16)}`
-		//let newIdNo = parser.parseFromString(newIdnoXML)
 		let newIdNo = xmlDoc.createElement('idno')
 		newIdNo.setAttribute('type', 'URI')
-		newIdNo.appendChild(xmlDoc.createTextNode(`http://sicily.classics.ox.ac.uk/inscription/${isicilyId}`))
+		newIdNo.appendChild(xmlDoc.createTextNode(`${ISICILY_ID_BASE_URI}${isicilyId}`))
 		pubStmt.insertBefore(newIdNo, availabilityElem)
 		pubStmt.insertBefore(xmlDoc.createTextNode(`\n${' '.repeat(16)}`),availabilityElem)
 	}

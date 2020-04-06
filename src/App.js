@@ -92,15 +92,6 @@ Number.prototype.toTime = function(isSec) {
 	async function processFile(xmlText, fonts, bibliography, sha, path, zenodoToken, useSandbox) {
 		let xmlDoc = parser.parseFromString(xmlText)
 		let isicilyId = select("string(//tei:publicationStmt/tei:idno[@type='filename'])", xmlDoc)
-	//	let zenodoDOI = select("string(//tei:publicationStmt/tei:idno[@type='DOI'])", xmlDoc)
-
-		// *************************
-		// probably have to change createDOIDeposition to use the newversion if zenodoDOI exists
-		// and then maybe set the doi in the returned object as just .DOI using either the
-		// prereserved or latest_draft as appropriate.
-		// And then change 'publish' call to use this DOI property
-		// **************************
-
 		 let deposition = await createDOIDeposition(zenodoToken, useSandbox);
 		 let doi = deposition.metadata.prereserve_doi.doi
 
