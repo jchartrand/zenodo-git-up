@@ -96,6 +96,8 @@ Number.prototype.toTime = function(isSec) {
 		 let doi = deposition.metadata.prereserve_doi.doi
 
 		let pdf = await createPDF(xmlDoc, doi, date, xmlText, fonts, bibliography)
+		console.log("about to call addISicilyIdToDoc with id: ")
+		console.log(isicilyId)
 		addISicilyIdToDoc(isicilyId, xmlDoc)
 		addDOIToDoc(doi, xmlDoc, date)
 		addRespStmt(xmlDoc)
