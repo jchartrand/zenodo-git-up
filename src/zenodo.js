@@ -2,6 +2,7 @@ const xpath = require('xpath')
 const select = xpath.useNamespaces({"tei": "http://www.tei-c.org/ns/1.0"});
 const ZENODO_BASE_URI_LIVE = 'zenodo.org'
 const ZENODO_BASE_URI_SANDBOX = 'sandbox.zenodo.org'
+const ISICILY_ID_BASE_URI = 'http://sicily.classics.ox.ac.uk/inscription/'
 
 const XMLSerializer = require('xmldom').XMLSerializer;
 const serializer = new XMLSerializer();

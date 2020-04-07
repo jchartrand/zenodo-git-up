@@ -105246,6 +105246,7 @@ var select = xpath.useNamespaces({
 });
 var ZENODO_BASE_URI_LIVE = 'zenodo.org';
 var ZENODO_BASE_URI_SANDBOX = 'sandbox.zenodo.org';
+var ISICILY_ID_BASE_URI = 'http://sicily.classics.ox.ac.uk/inscription/';
 
 var XMLSerializer = require('xmldom').XMLSerializer;
 
