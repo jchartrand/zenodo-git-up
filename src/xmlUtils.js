@@ -29,7 +29,9 @@ function addDOIToDoc(doi, xmlDoc, date) {
 
 function addISicilyIdToDoc(isicilyId, xmlDoc) {
 	let idno = select("//tei:publicationStmt/tei:idno[@type='URI']", xmlDoc)
-	if (! idno.length || ! idno.includes(ISICILY_ID_BASE_URI)) {
+	console.log("idno when trying to retrieve it from pubStmt in xmlUtils.addISicilyIdToDoc:")
+	console.log(idno)
+	if (!idno || ! idno.length || ! idno.includes(ISICILY_ID_BASE_URI)) {
 		console.log("no isicily id uri, so trying to add one")
 		let availabilityElem = select("//tei:publicationStmt/tei:availability", xmlDoc, true)
 		let pubStmt = select("//tei:publicationStmt", xmlDoc, true)
