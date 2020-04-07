@@ -30,6 +30,7 @@ function addDOIToDoc(doi, xmlDoc, date) {
 function addISicilyIdToDoc(isicilyId, xmlDoc) {
 	let idno = select("//tei:publicationStmt/tei:idno[@type='URI']", xmlDoc)
 	if (! idno.length || ! idno.includes(ISICILY_ID_BASE_URI)) {
+		console.log("no isicily id uri, so trying to add one")
 		let availabilityElem = select("//tei:publicationStmt/tei:availability", xmlDoc, true)
 		let pubStmt = select("//tei:publicationStmt", xmlDoc, true)
 		let newIdNo = xmlDoc.createElement('idno')
@@ -37,6 +38,8 @@ function addISicilyIdToDoc(isicilyId, xmlDoc) {
 		newIdNo.appendChild(xmlDoc.createTextNode(`${ISICILY_ID_BASE_URI}${isicilyId}`))
 		pubStmt.insertBefore(newIdNo, availabilityElem)
 		pubStmt.insertBefore(xmlDoc.createTextNode(`\n${' '.repeat(16)}`),availabilityElem)
+		console.log("should be added now in the xmlDoc:")
+		console.log(xmlDoc)
 	}
 }
 

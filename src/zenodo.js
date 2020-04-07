@@ -49,6 +49,8 @@ function uploadFilesToDeposition(bucketURI, filename, content, zenodoToken) {
 function addMetadata(deposition, isicilyId, zenodoToken, useSandbox, xmlDoc) {
 	//let isicilyId = select("string(//tei:publicationStmt/tei:idno[@type='filename'])", xmlDoc)
 	let uri = select("string(//tei:publicationStmt/tei:idno[@type='URI'])", xmlDoc)
+	console.log("the isicily uri id when trying to add to zenodo metadata:")
+	console.log(uri)
 	//if (!uri) { uri = ISICILY_ID_BASE_URI + isicilyId }
 	let title = select("string(//tei:fileDesc/tei:titleStmt/tei:title)", xmlDoc)
 	let respStmtNames = select("tei:TEI/tei:teiHeader/tei:fileDesc/tei:titleStmt/tei:respStmt/tei:name[. != 'system']", xmlDoc);
