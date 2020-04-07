@@ -103796,14 +103796,7 @@ function _processFile() {
         switch (_context2.prev = _context2.next) {
           case 0:
             xmlDoc = parser.parseFromString(xmlText);
-            isicilyId = select("string(//tei:publicationStmt/tei:idno[@type='filename'])", xmlDoc); //	let zenodoDOI = select("string(//tei:publicationStmt/tei:idno[@type='DOI'])", xmlDoc)
-            // *************************
-            // probably have to change createDOIDeposition to use the newversion if zenodoDOI exists
-            // and then maybe set the doi in the returned object as just .DOI using either the
-            // prereserved or latest_draft as appropriate.
-            // And then change 'publish' call to use this DOI property
-            // **************************
-
+            isicilyId = select("string(//tei:publicationStmt/tei:idno[@type='filename'])", xmlDoc);
             _context2.next = 4;
             return (0, _zenodo.createDOIDeposition)(zenodoToken, useSandbox);
 
@@ -103815,37 +103808,39 @@ function _processFile() {
 
           case 8:
             pdf = _context2.sent;
+            console.log("about to call addISicilyIdToDoc with id: ");
+            console.log(isicilyId);
             (0, _xmlUtils.addISicilyIdToDoc)(isicilyId, xmlDoc);
             (0, _xmlUtils.addDOIToDoc)(doi, xmlDoc, date);
             (0, _xmlUtils.addRespStmt)(xmlDoc);
             (0, _xmlUtils.addRevision)(xmlDoc, date);
             xmlString = serializer.serializeToString(xmlDoc);
-            _context2.next = 16;
+            _context2.next = 18;
             return (0, _zenodo.uploadFilesToDeposition)(deposition.links.bucket, "".concat(isicilyId, ".pdf"), pdf, zenodoToken);
 
-          case 16:
+          case 18:
             pdfUploadResult = _context2.sent;
-            _context2.next = 19;
+            _context2.next = 21;
             return (0, _zenodo.uploadFilesToDeposition)(deposition.links.bucket, "".concat(isicilyId, ".xml"), xmlString, zenodoToken);
 
-          case 19:
+          case 21:
             xmlUploadResult = _context2.sent;
-            _context2.next = 22;
+            _context2.next = 24;
             return (0, _zenodo.addMetadata)(deposition, isicilyId, zenodoToken, useSandbox, xmlDoc);
 
-          case 22:
+          case 24:
             addMetadataResult = _context2.sent;
-            _context2.next = 25;
+            _context2.next = 27;
             return (0, _zenodo.publish)(deposition, zenodoToken, useSandbox);
 
-          case 25:
-            _context2.next = 27;
+          case 27:
+            _context2.next = 29;
             return saveTEIFileToGithub(xmlString, sha, path);
 
-          case 27:
+          case 29:
             return _context2.abrupt("return", deposition.links.html);
 
-          case 28:
+          case 30:
           case "end":
             return _context2.stop();
         }
@@ -105172,6 +105167,7 @@ var parser = new DOMParser({
     }
   }
 });
+var ISICILY_ID_BASE_URI = 'http://sicily.classics.ox.ac.uk/inscription/';
 
 function addDOIToDoc(doi, xmlDoc, date) {
   //let doiIdno = select("//tei:publicationStmt/tei:idno[@type='DOI']", xmlDoc)
@@ -105192,17 +105188,20 @@ function addDOIToDoc(doi, xmlDoc, date) {
 
 function addISicilyIdToDoc(isicilyId, xmlDoc) {
   var idno = select("//tei:publicationStmt/tei:idno[@type='URI']", xmlDoc);
+  console.log("idno when trying to retrieve it from pubStmt in xmlUtils.addISicilyIdToDoc:");
+  console.log(idno);
 
-  if (!idno.length) {
+  if (!idno || !idno.length || !idno.includes(ISICILY_ID_BASE_URI)) {
+    console.log("no isicily id uri, so trying to add one");
     var availabilityElem = select("//tei:publicationStmt/tei:availability", xmlDoc, true);
-    var pubStmt = select("//tei:publicationStmt", xmlDoc, true); //let newIdnoXML = `<idno type="URI">http://sicily.classics.ox.ac.uk/inscription/${isicilyId}</idno>\n${' '.repeat(16)}`
-    //let newIdNo = parser.parseFromString(newIdnoXML)
-
+    var pubStmt = select("//tei:publicationStmt", xmlDoc, true);
     var newIdNo = xmlDoc.createElement('idno');
     newIdNo.setAttribute('type', 'URI');
-    newIdNo.appendChild(xmlDoc.createTextNode("http://sicily.classics.ox.ac.uk/inscription/".concat(isicilyId)));
+    newIdNo.appendChild(xmlDoc.createTextNode("".concat(ISICILY_ID_BASE_URI).concat(isicilyId)));
     pubStmt.insertBefore(newIdNo, availabilityElem);
     pubStmt.insertBefore(xmlDoc.createTextNode("\n".concat(' '.repeat(16))), availabilityElem);
+    console.log("should be added now in the xmlDoc:");
+    console.log(xmlDoc);
   }
 }
 
@@ -105305,6 +105304,9 @@ function uploadFilesToDeposition(bucketURI, filename, content, zenodoToken) {
 function addMetadata(deposition, isicilyId, zenodoToken, useSandbox, xmlDoc) {
   //let isicilyId = select("string(//tei:publicationStmt/tei:idno[@type='filename'])", xmlDoc)
   var uri = select("string(//tei:publicationStmt/tei:idno[@type='URI'])", xmlDoc);
+  console.log("the isicily uri id when trying to add to zenodo metadata:");
+  console.log(uri); //if (!uri) { uri = ISICILY_ID_BASE_URI + isicilyId }
+
   var title = select("string(//tei:fileDesc/tei:titleStmt/tei:title)", xmlDoc);
   var respStmtNames = select("tei:TEI/tei:teiHeader/tei:fileDesc/tei:titleStmt/tei:respStmt/tei:name[. != 'system']", xmlDoc);
   var contributors = respStmtNames.map(function (contributor) {
