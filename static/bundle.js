@@ -105302,7 +105302,9 @@ function uploadFilesToDeposition(bucketURI, filename, content, zenodoToken) {
 }
 
 function addMetadata(deposition, isicilyId, zenodoToken, useSandbox, xmlDoc) {
-  //let isicilyId = select("string(//tei:publicationStmt/tei:idno[@type='filename'])", xmlDoc)
+  console.log("the xml doc in zenodo.addMetadata:");
+  console.log(serializer.serializeToString(xmlDoc)); //let isicilyId = select("string(//tei:publicationStmt/tei:idno[@type='filename'])", xmlDoc)
+
   var uri = select("string(//tei:publicationStmt/tei:idno[@type='URI'])", xmlDoc);
   console.log("the isicily uri id when trying to add to zenodo metadata:");
   console.log(uri); //if (!uri) { uri = ISICILY_ID_BASE_URI + isicilyId }
