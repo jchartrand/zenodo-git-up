@@ -53,6 +53,11 @@ function addMetadata(deposition, isicilyId, zenodoToken, useSandbox, xmlDoc) {
 	console.log(serializer.serializeToString(xmlDoc))
 	//let isicilyId = select("string(//tei:publicationStmt/tei:idno[@type='filename'])", xmlDoc)
 	let uri = select("string(//tei:publicationStmt/tei:idno[@type='URI'])", xmlDoc)
+
+	let isicilyIdTest = select("string(//tei:publicationStmt/tei:idno[@type='filename'])", xmlDoc)
+	console.log("the isicilyIdTest in zenodo.addMetadata: ")
+	console.log(isicilyIdTest)
+
 	console.log("the isicily uri id when trying to add to zenodo metadata:")
 	console.log(uri)
 
