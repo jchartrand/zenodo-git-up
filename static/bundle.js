@@ -105170,29 +105170,20 @@ var parser = new DOMParser({
 var ISICILY_ID_BASE_URI = 'http://sicily.classics.ox.ac.uk/inscription/';
 
 function addDOIToDoc(doi, xmlDoc, date) {
-  //let doiIdno = select("//tei:publicationStmt/tei:idno[@type='DOI']", xmlDoc)
-  //if (! doiIdno.length) {
   var pubStmt = select("//tei:publicationStmt", xmlDoc, true);
-  var availabilityElem = select("//tei:publicationStmt/tei:availability", xmlDoc, true); //let newIdnoXML = `<idno type="DOI">${doi}</idno>\n${' '.repeat(16)}`
-  //let newIdNo = parser.parseFromString(newIdnoXML)
-
+  var availabilityElem = select("//tei:publicationStmt/tei:availability", xmlDoc, true);
   var newIdNo = xmlDoc.createElement('idno');
   newIdNo.setAttribute('type', 'DOI');
   newIdNo.setAttribute('when', date);
   newIdNo.appendChild(xmlDoc.createTextNode(doi));
   pubStmt.insertBefore(newIdNo, availabilityElem);
-  pubStmt.insertBefore(xmlDoc.createTextNode("\n".concat(' '.repeat(16))), availabilityElem); //	} else {
-  //	doiIdno[0].textContent = doi;
-  //}
+  pubStmt.insertBefore(xmlDoc.createTextNode("\n".concat(' '.repeat(16))), availabilityElem);
 }
 
 function addISicilyIdToDoc(isicilyId, xmlDoc) {
   var idno = select("//tei:publicationStmt/tei:idno[@type='URI']", xmlDoc);
-  console.log("idno when trying to retrieve it from pubStmt in xmlUtils.addISicilyIdToDoc:");
-  console.log(idno);
 
   if (!idno || !idno.length || !idno.includes(ISICILY_ID_BASE_URI)) {
-    console.log("no isicily id uri, so trying to add one");
     var availabilityElem = select("//tei:publicationStmt/tei:availability", xmlDoc, true);
     var pubStmt = select("//tei:publicationStmt", xmlDoc, true);
     var newIdNo = xmlDoc.createElement('idno');
@@ -105200,8 +105191,6 @@ function addISicilyIdToDoc(isicilyId, xmlDoc) {
     newIdNo.appendChild(xmlDoc.createTextNode("".concat(ISICILY_ID_BASE_URI).concat(isicilyId)));
     pubStmt.insertBefore(newIdNo, availabilityElem);
     pubStmt.insertBefore(xmlDoc.createTextNode("\n".concat(' '.repeat(16))), availabilityElem);
-    console.log("should be added now in the xmlDoc:");
-    console.log(xmlDoc);
   }
 }
 
@@ -105306,16 +105295,12 @@ function uploadFilesToDeposition(bucketURI, filename, content, zenodoToken) {
 }
 
 function addMetadata(deposition, isicilyId, zenodoToken, useSandbox, xmlDoc) {
-  console.log("the xml doc in zenodo.addMetadata:");
-  console.log(serializer.serializeToString(xmlDoc)); //let isicilyId = select("string(//tei:publicationStmt/tei:idno[@type='filename'])", xmlDoc)
-
-  var uri = select("string(//tei:publicationStmt/tei:idno[@type='URI'])", xmlDoc);
-  var isicilyIdTest = select("string(//tei:publicationStmt/tei:idno[@type='filename'])", xmlDoc);
-  console.log("the isicilyIdTest in zenodo.addMetadata: ");
-  console.log(isicilyIdTest);
-  console.log("the isicily uri id when trying to add to zenodo metadata:");
-  console.log(uri); //if (!uri) { uri = ISICILY_ID_BASE_URI + isicilyId }
-
+  // xpath (select) won't return results that we've added to the DOM after parsing
+  // so instead of using:
+  // let uri = select("string(//tei:publicationStmt/tei:idno[@type='URI'])", xmlDoc)
+  // to get the idno that we added earler,
+  // we instead just build it manually
+  var uri = ISICILY_ID_BASE_URI + isicilyId;
   var title = select("string(//tei:fileDesc/tei:titleStmt/tei:title)", xmlDoc);
   var respStmtNames = select("tei:TEI/tei:teiHeader/tei:fileDesc/tei:titleStmt/tei:respStmt/tei:name[. != 'system']", xmlDoc);
   var contributors = respStmtNames.map(function (contributor) {

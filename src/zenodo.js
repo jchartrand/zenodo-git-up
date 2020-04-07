@@ -49,19 +49,12 @@ function uploadFilesToDeposition(bucketURI, filename, content, zenodoToken) {
 }
 
 function addMetadata(deposition, isicilyId, zenodoToken, useSandbox, xmlDoc) {
-	console.log("the xml doc in zenodo.addMetadata:")
-	console.log(serializer.serializeToString(xmlDoc))
-	//let isicilyId = select("string(//tei:publicationStmt/tei:idno[@type='filename'])", xmlDoc)
-	let uri = select("string(//tei:publicationStmt/tei:idno[@type='URI'])", xmlDoc)
-
-	let isicilyIdTest = select("string(//tei:publicationStmt/tei:idno[@type='filename'])", xmlDoc)
-	console.log("the isicilyIdTest in zenodo.addMetadata: ")
-	console.log(isicilyIdTest)
-
-	console.log("the isicily uri id when trying to add to zenodo metadata:")
-	console.log(uri)
-
-	//if (!uri) { uri = ISICILY_ID_BASE_URI + isicilyId }
+	// xpath (select) won't return results that we've added to the DOM after parsing
+	// so instead of using:
+	// let uri = select("string(//tei:publicationStmt/tei:idno[@type='URI'])", xmlDoc)
+	// to get the idno that we added earler,
+	// we instead just build it manually
+	let uri = ISICILY_ID_BASE_URI + isicilyId
 	let title = select("string(//tei:fileDesc/tei:titleStmt/tei:title)", xmlDoc)
 	let respStmtNames = select("tei:TEI/tei:teiHeader/tei:fileDesc/tei:titleStmt/tei:respStmt/tei:name[. != 'system']", xmlDoc);
 	let contributors = respStmtNames.map(contributor=>{
