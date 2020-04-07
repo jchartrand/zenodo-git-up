@@ -105258,6 +105258,10 @@ var select = xpath.useNamespaces({
 var ZENODO_BASE_URI_LIVE = 'zenodo.org';
 var ZENODO_BASE_URI_SANDBOX = 'sandbox.zenodo.org';
 
+var XMLSerializer = require('xmldom').XMLSerializer;
+
+var serializer = new XMLSerializer();
+
 function createDOIDeposition(zenodoToken, useSandbox) {
   return fetch("https://".concat(useSandbox ? ZENODO_BASE_URI_SANDBOX : ZENODO_BASE_URI_LIVE, "/api/deposit/depositions?access_token=").concat(zenodoToken), {
     method: 'POST',
@@ -105398,4 +105402,4 @@ function publish(deposition, zenodoToken, useSandbox) {
   });
 }
 
-},{"xpath":389}]},{},[390]);
+},{"xmldom":386,"xpath":389}]},{},[390]);
