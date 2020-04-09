@@ -32,7 +32,7 @@ The PDF includes any images referenced in the facsimile/surface/graphic section 
     </facsimile>
 ```
 
-The images themselves must be in the images directory and must have names that match those in the TEI file, but with '_small' appended to the file name.  So, taking the example above, where
+The images themselves must be in the images directory of the repository from which you are running the uploader, which is likely the the repository associated with this README, i.e., jchartrand/zenodo-git-up or a fork of same) and must have names that match those in the TEI file, but with '_small' appended to the file name.  So, taking the example above, where
 the file name in the 'url' attribute of the 'graphic' element (with attribute n="print") is 'ISic0007.jpg', there must then be an image in the images directory called
 'ISic0007_small.jpg'
 

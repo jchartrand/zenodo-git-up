@@ -43,7 +43,7 @@ function addRespStmt(xmlDoc) {
 		let newRespStmt = xmlDoc.createElement('respStmt')
 		let newName = xmlDoc.createElement('name')
 		let newResp = xmlDoc.createElement('resp')
-		newName.setAttribute('xml:id', 'system')
+		newName.setAttribute('xml:id', '#system')
 		newName.appendChild(xmlDoc.createTextNode('system'))
 		newResp.appendChild(xmlDoc.createTextNode('automated or batch processes'))
 		newRespStmt.appendChild(xmlDoc.createTextNode(`\n${' '.repeat(20)}`))
