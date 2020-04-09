@@ -43,7 +43,7 @@ function addRespStmt(xmlDoc) {
 		let newRespStmt = xmlDoc.createElement('respStmt')
 		let newName = xmlDoc.createElement('name')
 		let newResp = xmlDoc.createElement('resp')
-		newName.setAttribute('xml:id', '#system')
+		newName.setAttribute('xml:id', 'system')
 		newName.appendChild(xmlDoc.createTextNode('system'))
 		newResp.appendChild(xmlDoc.createTextNode('automated or batch processes'))
 		newRespStmt.appendChild(xmlDoc.createTextNode(`\n${' '.repeat(20)}`))
@@ -62,7 +62,7 @@ function addRevision(xmlDoc, date) {
 	let revisionChangeList = select("//tei:revisionDesc/tei:listChange", xmlDoc)[0]
 	let newChange = xmlDoc.createElement('change')
 	newChange.setAttribute('when', date)
-	newChange.setAttribute('who', 'system')
+	newChange.setAttribute('who', '#system')
 	newChange.appendChild(xmlDoc.createTextNode('Updated Zenodo DOI'))
 	revisionChangeList.appendChild(xmlDoc.createTextNode('    '))
 	revisionChangeList.appendChild(newChange)

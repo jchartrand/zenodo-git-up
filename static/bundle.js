@@ -105202,7 +105202,7 @@ function addRespStmt(xmlDoc) {
     var newRespStmt = xmlDoc.createElement('respStmt');
     var newName = xmlDoc.createElement('name');
     var newResp = xmlDoc.createElement('resp');
-    newName.setAttribute('xml:id', '#system');
+    newName.setAttribute('xml:id', 'system');
     newName.appendChild(xmlDoc.createTextNode('system'));
     newResp.appendChild(xmlDoc.createTextNode('automated or batch processes'));
     newRespStmt.appendChild(xmlDoc.createTextNode("\n".concat(' '.repeat(20))));
@@ -105221,7 +105221,7 @@ function addRevision(xmlDoc, date) {
   var revisionChangeList = select("//tei:revisionDesc/tei:listChange", xmlDoc)[0];
   var newChange = xmlDoc.createElement('change');
   newChange.setAttribute('when', date);
-  newChange.setAttribute('who', 'system');
+  newChange.setAttribute('who', '#system');
   newChange.appendChild(xmlDoc.createTextNode('Updated Zenodo DOI'));
   revisionChangeList.appendChild(xmlDoc.createTextNode('    '));
   revisionChangeList.appendChild(newChange);
