@@ -53,6 +53,8 @@ The zotero reference (e.g., `http://zotero.org/groups/382445/items/R46KDTZX`) is
 
 ![zotero](docs/images/buildZotero.png)
 
+NOTE:  The above image doesn't show this, but you must complete the Github fields in the form (Github Oauth Token, Github Repository, and Github Repository Owner) before pushing the button.
+
 This cache must be available or the uploading will fail.  The cached file will appear in the root directory as cachedBibl.json and should be between 1 and 2 Megabytes.  Refresh the cache anytime a change has been made to the Zotero bibliography.
 
 #### Create a copy of the ISicily Repository
