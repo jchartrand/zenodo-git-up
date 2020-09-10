@@ -36,6 +36,7 @@ The images themselves must be in the images directory of the repository from whi
 the file name in the 'url' attribute of the 'graphic' element (with attribute n="print") is 'ISic0007.jpg', there must then be an image in the images directory called
 'ISic0007_small.jpg'
 
+NOTE:  the image names must end in lowercase ‘jpg’ both in the TEI file and in the image directory.  Uppercase (JPG) or any other image type (gif, GIF, png, PNG, etc.) will hang the upload.
  
 #### Cache Zotero for Bibliographic References
 
