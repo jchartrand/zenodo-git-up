@@ -51,7 +51,7 @@ Number.prototype.toTime = function(isSec) {
 				// && i < 3
 				let itemId = `${file.path}-item`
 				try {
-					console.log(file)
+
 					let resp = await github.git.getBlob({
 						owner: githubOwner,
 						repo: githubRepo,
@@ -66,7 +66,8 @@ Number.prototype.toTime = function(isSec) {
 				} catch (e) {
 					console.log(e)
 					console.log(`Problem with file ${file.path}: ${e}`);
-					$('#failedList').append(`<li id="${itemId}" class="list-group-item">${file.path} -- error:  ${e.toString().slice(0,30)}</li>`)
+					$('#failedList').append(`<li id="${itemId}" class="list-group-item" title="${e}">${file.path} -- error:  ${e.toString().slice(0,30)}</li>`)
+
 
 				}
 				$('#elapsedTime').html(`Elapsed Time:  ${(Date.now() - startTime).toTime()}`)
@@ -96,8 +97,7 @@ Number.prototype.toTime = function(isSec) {
 		 let doi = deposition.metadata.prereserve_doi.doi
 
 		let pdf = await createPDF(xmlDoc, doi, date, xmlText, fonts, bibliography)
-		console.log("about to call addISicilyIdToDoc with id: ")
-		console.log(isicilyId)
+
 		addISicilyIdToDoc(isicilyId, xmlDoc)
 		addDOIToDoc(doi, xmlDoc, date)
 		addRespStmt(xmlDoc)

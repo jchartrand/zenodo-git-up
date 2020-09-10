@@ -103679,48 +103679,47 @@ function _processFiles() {
 
           case 7:
             if (_iteratorNormalCompletion = (_step = _iterator.next()).done) {
-              _context.next = 39;
+              _context.next = 38;
               break;
             }
 
             _step$value = (0, _slicedToArray2["default"])(_step.value, 2), i = _step$value[0], file = _step$value[1];
 
             if (!file.path.endsWith('.xml')) {
-              _context.next = 36;
+              _context.next = 35;
               break;
             }
 
             // && i < 3
             itemId = "".concat(file.path, "-item");
             _context.prev = 11;
-            console.log(file);
-            _context.next = 15;
+            _context.next = 14;
             return github.git.getBlob({
               owner: githubOwner,
               repo: githubRepo,
               file_sha: file.sha
             });
 
-          case 15:
+          case 14:
             resp = _context.sent;
             decodedResp = Buffer.from(resp.data.content, 'base64').toString('utf8');
-            _context.next = 19;
+            _context.next = 18;
             return processFile(decodedResp, fonts, bibliography, file.sha, file.path, zenodoToken, useSandbox);
 
-          case 19:
+          case 18:
             doi = _context.sent;
             (0, _jquery["default"])('#publishedList').append("<li id=\"".concat(itemId, "\" class=\"list-group-item\">").concat(file.path, " -- <a href=\"").concat(doi, "\">").concat(doi, "</a></li>"));
-            _context.next = 28;
+            _context.next = 27;
             break;
 
-          case 23:
-            _context.prev = 23;
+          case 22:
+            _context.prev = 22;
             _context.t0 = _context["catch"](11);
             console.log(_context.t0);
             console.log("Problem with file ".concat(file.path, ": ").concat(_context.t0));
-            (0, _jquery["default"])('#failedList').append("<li id=\"".concat(itemId, "\" class=\"list-group-item\">").concat(file.path, " -- error:  ").concat(_context.t0.toString().slice(0, 30), "</li>"));
+            (0, _jquery["default"])('#failedList').append("<li id=\"".concat(itemId, "\" class=\"list-group-item\" title=\"").concat(_context.t0, "\">").concat(file.path, " -- error:  ").concat(_context.t0.toString().slice(0, 30), "</li>"));
 
-          case 28:
+          case 27:
             (0, _jquery["default"])('#elapsedTime').html("Elapsed Time:  ".concat((Date.now() - startTime).toTime()));
             totalPublished = (0, _jquery["default"])("#publishedList li").length;
             totalFailed = (0, _jquery["default"])("#failedList li").length;
@@ -103730,54 +103729,54 @@ function _processFiles() {
             (0, _jquery["default"])('#status').html("<b>Status:</b> Finished ".concat(totalDone, " of ").concat(totalFileCount));
             document.getElementById(itemId).scrollIntoView();
 
-          case 36:
+          case 35:
             _iteratorNormalCompletion = true;
             _context.next = 7;
             break;
 
-          case 39:
-            _context.next = 45;
+          case 38:
+            _context.next = 44;
             break;
 
-          case 41:
-            _context.prev = 41;
+          case 40:
+            _context.prev = 40;
             _context.t1 = _context["catch"](5);
             _didIteratorError = true;
             _iteratorError = _context.t1;
 
-          case 45:
+          case 44:
+            _context.prev = 44;
             _context.prev = 45;
-            _context.prev = 46;
 
             if (!_iteratorNormalCompletion && _iterator["return"] != null) {
               _iterator["return"]();
             }
 
-          case 48:
-            _context.prev = 48;
+          case 47:
+            _context.prev = 47;
 
             if (!_didIteratorError) {
-              _context.next = 51;
+              _context.next = 50;
               break;
             }
 
             throw _iteratorError;
 
+          case 50:
+            return _context.finish(47);
+
           case 51:
-            return _context.finish(48);
+            return _context.finish(44);
 
           case 52:
-            return _context.finish(45);
-
-          case 53:
             document.getElementById('publishedList').scrollIntoView();
 
-          case 54:
+          case 53:
           case "end":
             return _context.stop();
         }
       }
-    }, _callee, null, [[5, 41, 45, 53], [11, 23], [46,, 48, 52]]);
+    }, _callee, null, [[5, 40, 44, 52], [11, 22], [45,, 47, 51]]);
   }));
   return _processFiles.apply(this, arguments);
 }
@@ -103808,39 +103807,37 @@ function _processFile() {
 
           case 8:
             pdf = _context2.sent;
-            console.log("about to call addISicilyIdToDoc with id: ");
-            console.log(isicilyId);
             (0, _xmlUtils.addISicilyIdToDoc)(isicilyId, xmlDoc);
             (0, _xmlUtils.addDOIToDoc)(doi, xmlDoc, date);
             (0, _xmlUtils.addRespStmt)(xmlDoc);
             (0, _xmlUtils.addRevision)(xmlDoc, date);
             xmlString = serializer.serializeToString(xmlDoc);
-            _context2.next = 18;
+            _context2.next = 16;
             return (0, _zenodo.uploadFilesToDeposition)(deposition.links.bucket, "".concat(isicilyId, ".pdf"), pdf, zenodoToken);
 
-          case 18:
+          case 16:
             pdfUploadResult = _context2.sent;
-            _context2.next = 21;
+            _context2.next = 19;
             return (0, _zenodo.uploadFilesToDeposition)(deposition.links.bucket, "".concat(isicilyId, ".xml"), xmlString, zenodoToken);
 
-          case 21:
+          case 19:
             xmlUploadResult = _context2.sent;
-            _context2.next = 24;
+            _context2.next = 22;
             return (0, _zenodo.addMetadata)(deposition, isicilyId, zenodoToken, useSandbox, xmlDoc);
 
-          case 24:
+          case 22:
             addMetadataResult = _context2.sent;
-            _context2.next = 27;
+            _context2.next = 25;
             return (0, _zenodo.publish)(deposition, zenodoToken, useSandbox);
 
-          case 27:
-            _context2.next = 29;
+          case 25:
+            _context2.next = 27;
             return saveTEIFileToGithub(xmlString, sha, path);
 
-          case 29:
+          case 27:
             return _context2.abrupt("return", deposition.links.html);
 
-          case 30:
+          case 28:
           case "end":
             return _context2.stop();
         }
@@ -104617,6 +104614,7 @@ var xpath = require('xpath');
 var select = xpath.useNamespaces({
   "tei": "http://www.tei-c.org/ns/1.0"
 });
+var IMAGE_ERROR = "Couldn't load the image - make sure the name of the image in the TEI graphic element matches the name in the image directory in this repository, less the _small part.  See the README. ";
 
 function createPDF(_x, _x2, _x3, _x4, _x5, _x6) {
   return _createPDF.apply(this, arguments);
@@ -104683,27 +104681,37 @@ function _createPDF() {
 
             getDataUri = function getDataUri(isicilyId, imageFile) {
               return new Promise(function (imageResolve, imageReject) {
-                var image = new Image();
-                image.crossOrigin = "anonymous";
+                try {
+                  var image = new Image();
+                  image.crossOrigin = "anonymous";
 
-                image.onload = function () {
-                  var canvas = document.createElement('canvas');
-                  canvas.width = this.naturalWidth; // or 'width' if you want a special/scaled size
+                  image.onload = function () {
+                    var canvas = document.createElement('canvas');
+                    canvas.width = this.naturalWidth; // or 'width' if you want a special/scaled size
 
-                  canvas.height = this.naturalHeight; // or 'height' if you want a special/scaled size
+                    canvas.height = this.naturalHeight; // or 'height' if you want a special/scaled size
 
-                  canvas.getContext('2d').drawImage(this, 0, 0); // Get raw image data
-                  //callback(canvas.toDataURL('image/png').replace(/^data:image\/(png|jpg);base64,/, ''));
-                  // ... or get as Data URI
-                  //callback(canvas.toDataURL('image/png'));
+                    canvas.getContext('2d').drawImage(this, 0, 0); // Get raw image data
+                    //callback(canvas.toDataURL('image/png').replace(/^data:image\/(png|jpg);base64,/, ''));
+                    // ... or get as Data URI
+                    //callback(canvas.toDataURL('image/png'));
 
-                  imageResolve(canvas.toDataURL('image/png'));
-                }; // `http://sicily.classics.ox.ac.uk/inscription_images/ISic0007/ISic0007.jpg`
-                //image.src =  `http://sicily.classics.ox.ac.uk/inscription_images/${isicilyId}/${imageFile}`;
+                    imageResolve(canvas.toDataURL('image/png'));
+                  };
+
+                  image.onerror = function () {
+                    console.log(IMAGE_ERROR);
+                    imageReject(IMAGE_ERROR);
+                  }; // `http://sicily.classics.ox.ac.uk/inscription_images/ISic0007/ISic0007.jpg`
+                  //image.src =  `http://sicily.classics.ox.ac.uk/inscription_images/${isicilyId}/${imageFile}`;
 
 
-                var smallImageFile = imageFile.replace(".jpg", "_small.jpg");
-                image.src = "../images/".concat(smallImageFile);
+                  var smallImageFile = imageFile.replace(".jpg", "_small.jpg");
+                  image.src = "../images/".concat(smallImageFile);
+                } catch (e) {
+                  console.log(IMAGE_ERROR + e);
+                  imageReject(IMAGE_ERROR + e);
+                }
               });
             };
 

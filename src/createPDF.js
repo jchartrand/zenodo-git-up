@@ -6,48 +6,63 @@ const select = xpath.useNamespaces({"tei": "http://www.tei-c.org/ns/1.0"});
 import printLeiden from './leidenGenerator'
 import addBibliography from './addBibliography'
 
+const IMAGE_ERROR = "Couldn't load the image - make sure the name of the image in the TEI graphic element matches the name in the image directory in this repository, less the _small part.  See the README. "
+
 async function createPDF(xmlDoc, doi, date, xmlString, fonts, bibliography) {
 
 	const getDataUri = (isicilyId, imageFile) => {
 
 		return new Promise(function(imageResolve, imageReject) {
 
-			let image = new Image();
-			image.crossOrigin="anonymous"
-			image.onload = function () {
-				var canvas = document.createElement('canvas');
-				canvas.width = this.naturalWidth; // or 'width' if you want a special/scaled size
-				canvas.height = this.naturalHeight; // or 'height' if you want a special/scaled size
+			try {
+				let image = new Image();
+				image.crossOrigin = "anonymous"
+				image.onload = function () {
+					var canvas = document.createElement('canvas');
+					canvas.width = this.naturalWidth; // or 'width' if you want a special/scaled size
+					canvas.height = this.naturalHeight; // or 'height' if you want a special/scaled size
 
-				canvas.getContext('2d').drawImage(this, 0, 0);
+					canvas.getContext('2d').drawImage(this, 0, 0);
+					// Get raw image data
+					//callback(canvas.toDataURL('image/png').replace(/^data:image\/(png|jpg);base64,/, ''));
+					// ... or get as Data URI
+					//callback(canvas.toDataURL('image/png'));
+					imageResolve(canvas.toDataURL('image/png'))
+				};
+				image.onerror = function () {
+					console.log(IMAGE_ERROR);
+					imageReject(IMAGE_ERROR);
+				}
+				// `http://sicily.classics.ox.ac.uk/inscription_images/ISic0007/ISic0007.jpg`
+				//image.src =  `http://sicily.classics.ox.ac.uk/inscription_images/${isicilyId}/${imageFile}`;
+				let smallImageFile = imageFile.replace(".jpg", "_small.jpg");
 
-				// Get raw image data
-				//callback(canvas.toDataURL('image/png').replace(/^data:image\/(png|jpg);base64,/, ''));
-				// ... or get as Data URI
-				//callback(canvas.toDataURL('image/png'));
-				imageResolve(canvas.toDataURL('image/png'))
-			};
-			// `http://sicily.classics.ox.ac.uk/inscription_images/ISic0007/ISic0007.jpg`
-			//image.src =  `http://sicily.classics.ox.ac.uk/inscription_images/${isicilyId}/${imageFile}`;
-			let smallImageFile = imageFile.replace(".jpg","_small.jpg");
-			image.src =  `../images/${smallImageFile}`;
+				image.src = `../images/${smallImageFile}`;
+
+			} catch (e) {
+				console.log(IMAGE_ERROR + e);
+				imageReject(IMAGE_ERROR + e);
+			}
 		});
 	}
 
 	async function addImage(isicilyId, pdfDoc) {
-		let image = select("//tei:graphic[@n='print']", xmlDoc, true)
-		if (image) {
-			let url = image.getAttribute('url')
-			let imageDesc = image.getElementsByTagName('desc')
-			let descText = imageDesc.length ? imageDesc[0].textContent.trim() : 'uncredited'
-			console.log('url in addImage')
-			console.log(url)
-			let imageData = await getDataUri(isicilyId, url)
-			pdfDoc.addPage().image(imageData, {fit: [450, 700], align: 'center', valign: 'top'})
-			pdfDoc.moveDown()
-			pdfDoc.text(descText)
-			console.log("finished with adding image")
-		}
+
+
+			let image = select("//tei:graphic[@n='print']", xmlDoc, true)
+			if (image) {
+				let url = image.getAttribute('url')
+				let imageDesc = image.getElementsByTagName('desc')
+				let descText = imageDesc.length ? imageDesc[0].textContent.trim() : 'uncredited'
+				console.log('url in addImage')
+				console.log(url)
+				let imageData = await getDataUri(isicilyId, url)
+				pdfDoc.addPage().image(imageData, {fit: [450, 700], align: 'center', valign: 'top'})
+				pdfDoc.moveDown()
+				pdfDoc.text(descText)
+				console.log("finished with adding image")
+			}
+
 	}
 
 	return new Promise(async function(resolve, reject) {
