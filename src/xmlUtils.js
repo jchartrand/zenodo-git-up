@@ -22,20 +22,6 @@ function addDOIToDoc(doi, xmlDoc, date) {
 
 }
 
-function addISicilyIdToDoc(isicilyId, xmlDoc) {
-	let idno = select("//tei:publicationStmt/tei:idno[@type='URI']", xmlDoc)
-	if (!idno || ! idno.length || ! idno.includes(ISICILY_ID_BASE_URI)) {
-		let availabilityElem = select("//tei:publicationStmt/tei:availability", xmlDoc, true)
-		let pubStmt = select("//tei:publicationStmt", xmlDoc, true)
-		let newIdNo = xmlDoc.createElement('idno')
-		newIdNo.setAttribute('type', 'URI')
-		newIdNo.appendChild(xmlDoc.createTextNode(`${ISICILY_ID_BASE_URI}${isicilyId}`))
-		pubStmt.insertBefore(newIdNo, availabilityElem)
-		pubStmt.insertBefore(xmlDoc.createTextNode(`\n${' '.repeat(16)}`),availabilityElem)
-
-	}
-}
-
 function addRespStmt(xmlDoc) {
 	let respStmt = select("tei:TEI/tei:teiHeader/tei:fileDesc/tei:titleStmt/tei:respStmt/tei:name[text()='system']", xmlDoc)
 	if (! respStmt.length) {
@@ -69,4 +55,4 @@ function addRevision(xmlDoc, date) {
 	revisionChangeList.appendChild(xmlDoc.createTextNode(`\n${' '.repeat(12)}`))
 }
 
-export { addDOIToDoc, addRespStmt, addRevision, addISicilyIdToDoc}
+export { addDOIToDoc, addRespStmt, addRevision}

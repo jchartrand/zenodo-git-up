@@ -1,5 +1,5 @@
 import { buildCachedBibliography, getCachedBibliography } from "./bibliography";
-import  { addDOIToDoc, addRespStmt, addRevision, addISicilyIdToDoc } from "./xmlUtils"
+import  { addDOIToDoc, addRespStmt, addRevision } from "./xmlUtils"
 import {createDOIDeposition, uploadFilesToDeposition, addMetadata, publish} from "./zenodo"
 import createPDF from "./createPDF"
 import vkbeautify from 'vkbeautify'
@@ -98,7 +98,7 @@ Number.prototype.toTime = function(isSec) {
 
 		let pdf = await createPDF(xmlDoc, doi, date, xmlText, fonts, bibliography)
 
-		addISicilyIdToDoc(isicilyId, xmlDoc)
+
 		addDOIToDoc(doi, xmlDoc, date)
 		addRespStmt(xmlDoc)
 		addRevision(xmlDoc, date)
