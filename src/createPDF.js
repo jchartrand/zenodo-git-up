@@ -231,8 +231,8 @@ async function createPDF(xmlDoc, doi, date, xmlString, fonts, bibliography) {
 							addTitle('Interlineation')
 						}
 						let heightElem = node.getElementsByTagName('height')[0]
-						let height = getElementText(heightElem)
-						let unit = heightElem.getAttribute('unit')
+						let height = heightElem?getElementText(heightElem):''
+						let unit = heightElem?heightElem.getAttribute('unit'):''
 						addText(`${locus}: ${height} ${unit}`)
 					}
 				})
@@ -328,6 +328,7 @@ async function createPDF(xmlDoc, doi, date, xmlString, fonts, bibliography) {
 			});
 
 		} catch (e) {
+			console.log(e)
 			reject(`Some problem with the PDF generation: ${e}`)
 		}
 	});  // end of the returned Promise
